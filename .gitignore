@@ -1,0 +1,10 @@
+*~
+*.bak
+*.exe
+*.a
+*.d
+*.o
+*.s
+/bin
+/lib
+/obj

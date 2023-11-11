@@ -1,0 +1,14 @@
+# -*- coding:utf-8-unix -*-
+BasedOnStyle: LLVM
+IndentWidth: 2
+AlignAfterOpenBracket: Align
+ContinuationIndentWidth: 2
+AlignEscapedNewlines: Right
+AlignTrailingComments: true
+AlignConsecutiveMacros: AcrossEmptyLines
+ColumnLimit: 74
+PointerAlignment: Left
+AllowShortBlocksOnASingleLine: false
+AllowShortFunctionsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: false
+AlwaysBreakTemplateDeclarations: true

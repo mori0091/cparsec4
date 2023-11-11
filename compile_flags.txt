@@ -1,0 +1,4 @@
+-std=c2x
+-I./include
+-I./cppmp/include
+-Wall
