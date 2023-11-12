@@ -4,6 +4,3 @@
 [submodule "tgc"]
 	path = tgc
 	url = git@github.com:mori0091/tgc.git
-[submodule "cppmp"]
-	path = cppmp
-	url = git@github.com:mori0091/cppmp.git

@@ -31,8 +31,8 @@ CFLAGS += -std=c2x
 CFLAGS += -MMD
 CFLAGS += -DNDEBUG -Wall
 CFLAGS += -I include
-CFLAGS += -I cppmp/include
 CFLAGS += -I tgc/include
+CFLAGS += -I tgc/cppmp/include
 LDFLAGS ?=
 # LDFLAGS ?= -L tgc/lib -ltgc
 
