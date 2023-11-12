@@ -8,8 +8,8 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#ifndef PARSEC_INTERNAL_PARSER_H_
-#define PARSEC_INTERNAL_PARSER_H_
+#ifndef CPARSEC4_INTERNAL_PARSER_H_
+#define CPARSEC4_INTERNAL_PARSER_H_
 
 #include "copy.h"
 #include "core.h"
@@ -338,4 +338,4 @@
   }                                                                      \
   fn(name##_ctor_, ParserParam_##name, UnParserArgs(I, O)) /* {...} */
 
-#endif // PARSEC_INTERNAL_PARSER_H_
+#endif // CPARSEC4_INTERNAL_PARSER_H_

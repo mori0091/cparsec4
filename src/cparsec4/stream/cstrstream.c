@@ -8,7 +8,7 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#include "parsec/stream/cstrstream.h"
+#include "cparsec4/stream/cstrstream.h"
 
 impl_StreamError_for_UnexpectedParse(TOKEN(CStr), CHUNK(CStr));
 

@@ -8,8 +8,8 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#ifndef PARSEC_PARSER_H_
-#define PARSEC_PARSER_H_
+#ifndef CPARSEC4_PARSER_H_
+#define CPARSEC4_PARSER_H_
 
 /**
  * Typename of a parser.
@@ -107,4 +107,4 @@
 
 #include "./internal/parser.h"
 
-#endif // PARSEC_PARSER_H_
+#endif // CPARSEC4_PARSER_H_

@@ -8,11 +8,8 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#include "parsec/error/unexpectedparse.h"
+#include "cparsec4/error/unexpectedparse.h"
 
-impl_Display_for(UnexpectedParse) {
-  const char* s =
-    (self == Eoi ? "<end of input>"
-                 : (self == Unexpected ? "<unexpected>" : "<?>"));
-  fmt_write(out, s);
+impl_Eq_for(UnexpectedParse) {
+  return a == b;
 }

@@ -8,8 +8,8 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#ifndef PARSEC_STREAM_H_
-#define PARSEC_STREAM_H_
+#ifndef CPARSEC4_STREAM_H_
+#define CPARSEC4_STREAM_H_
 
 #include "result.h"
 
@@ -95,4 +95,4 @@
 #define CHECKPOINT(Input)                                                \
   EXTRACT_OR_DEFAULT(CAT(CHECKPOINT_, Input), UNDEFINED)
 
-#endif // PARSEC_STREAM_H_
+#endif // CPARSEC4_STREAM_H_

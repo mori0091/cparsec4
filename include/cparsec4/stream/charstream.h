@@ -8,11 +8,11 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#ifndef PARSEC_STREAM_CHARSTREAM_H_
-#define PARSEC_STREAM_CHARSTREAM_H_
+#ifndef CPARSEC4_STREAM_CHARSTREAM_H_
+#define CPARSEC4_STREAM_CHARSTREAM_H_
 
-#include "parsec/error/unexpectedparse.h"
-#include "parsec/stream/slicestream.h"
+#include "cparsec4/error/unexpectedparse.h"
+#include "cparsec4/stream/slicestream.h"
 #include "primitive.h"
 
 require_type(Slice(char));
@@ -26,4 +26,4 @@ require_type(Slice(char));
 def_StreamErrorFor(Slice(char));
 def_Stream(Slice(char));
 
-#endif // PARSEC_STREAM_CHARSTREAM_H_
+#endif // CPARSEC4_STREAM_CHARSTREAM_H_

@@ -8,11 +8,11 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#ifndef PARSEC_PARSER_REPEAT_H_
-#define PARSEC_PARSER_REPEAT_H_
+#ifndef CPARSEC4_PARSER_REPEAT_H_
+#define CPARSEC4_PARSER_REPEAT_H_
 
-#include "parsec/parser.h"
-#include "parsec/stream.h"
+#include "cparsec4/parser.h"
+#include "cparsec4/stream.h"
 #include "vec.h"
 
 #define ParserRepeat(I, O) TYPE_NAME(ParserRepeat, I, O)
@@ -77,4 +77,4 @@
 
 #define impl_ParserRepeat_Many1(I, O) END_OF_STATEMENT
 
-#endif // PARSEC_PARSER_REPEAT_H_
+#endif // CPARSEC4_PARSER_REPEAT_H_

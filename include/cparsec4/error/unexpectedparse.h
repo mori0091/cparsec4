@@ -8,10 +8,10 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#ifndef PARSEC_ERROR_UNEXPECTEDPARSE_H_
-#define PARSEC_ERROR_UNEXPECTEDPARSE_H_
+#ifndef CPARSEC4_ERROR_UNEXPECTEDPARSE_H_
+#define CPARSEC4_ERROR_UNEXPECTEDPARSE_H_
 
-#include "parsec/streamerror.h"
+#include "cparsec4/streamerror.h"
 
 typedef enum UnexpectedParse {
   Eoi,
@@ -20,23 +20,15 @@ typedef enum UnexpectedParse {
 
 #include "copy.h"
 def_Copy(UnexpectedParse);
-#if defined(IMPLEMENT)
-#endif
 
 #include "eq.h"
 def_Eq(UnexpectedParse);
-#if defined(IMPLEMENT)
-#endif
 
 #include "fmt/debug.h"
 def_Debug(UnexpectedParse);
-#if defined(IMPLEMENT)
-#endif
 
 #include "fmt/display.h"
 def_Display(UnexpectedParse);
-#if defined(IMPLEMENT)
-#endif
 
 // ---------------------------------------------------------------------
 /**
@@ -107,4 +99,4 @@ def_Display(UnexpectedParse);
       end_of_input, StreamError(Token, Chunk, UnexpectedParse)),         \
   }
 
-#endif // PARSEC_ERROR_UNEXPECTEDPARSE_H_
+#endif // CPARSEC4_ERROR_UNEXPECTEDPARSE_H_

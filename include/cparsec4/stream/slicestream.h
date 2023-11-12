@@ -8,11 +8,11 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#ifndef PARSEC_STREAM_SLICESTREAM_H_
-#define PARSEC_STREAM_SLICESTREAM_H_
+#ifndef CPARSEC4_STREAM_SLICESTREAM_H_
+#define CPARSEC4_STREAM_SLICESTREAM_H_
 
-#include "parsec/stream.h"
-#include "parsec/streamerror.h"
+#include "cparsec4/stream.h"
+#include "cparsec4/streamerror.h"
 
 // ---------------------------------------------------------------------
 #include "slice.h"
@@ -68,4 +68,4 @@
     .reset = FUNC_NAME(reset, Stream(Slice(T))),                         \
   }
 
-#endif // PARSEC_STREAM_SLICESTREAM_H_
+#endif // CPARSEC4_STREAM_SLICESTREAM_H_

@@ -8,8 +8,8 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#ifndef PARSEC_STREAMERROR_H_
-#define PARSEC_STREAMERROR_H_
+#ifndef CPARSEC4_STREAMERROR_H_
+#define CPARSEC4_STREAMERROR_H_
 
 #include "cstring.h"
 
@@ -36,11 +36,11 @@
     Error (*end_of_input)(void);                                         \
   }
 
-#include "stream.h"
+#include "cparsec4/stream.h"
 
 #define StreamErrorFor(I) StreamError(TOKEN(I), CHUNK(I), ERROR(I))
 
 #define def_StreamErrorFor(I)                                            \
   def_StreamError(TOKEN(I), CHUNK(I), ERROR(I))
 
-#endif // PARSEC_STREAMERROR_H_
+#endif // CPARSEC4_STREAMERROR_H_

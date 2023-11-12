@@ -16,7 +16,7 @@
 
 #if 0
 // ---------------------------------------------------------------------
-#include "parsec/stream/charstream.h"
+#include "cparsec4/stream/charstream.h"
 #define Input Slice(char)
 
 #include <string.h>
@@ -31,7 +31,7 @@
 
 #else
 
-#include "parsec/stream/cstrstream.h"
+#include "cparsec4/stream/cstrstream.h"
 #define Input  CStr
 #define STR(s) cstr(s)
 #define CHR(c) cstr(c)
@@ -50,7 +50,7 @@
 #include "vec.h"
 use_Vec(Token);
 
-#include "parsec/parser.h"
+#include "cparsec4/parser.h"
 use_Parser(Input, Unit);
 use_Parser(Input, Token);
 use_Parser(Input, Vec(Token));
@@ -65,12 +65,12 @@ use_Parser(Input, Vec(Token));
 #include "fmt/print.h"
 
 // ---------------------------------------------------------------------
-#include "parsec/parser/token.h"
+#include "cparsec4/parser/token.h"
 
 use_recursive_Fn(Token, Token, bool);
 use_ParserToken(Input);
 
-#include "parsec/parser/repeat.h"
+#include "cparsec4/parser/repeat.h"
 use_ParserRepeat(Input, Token);
 
 // ---------------------------------------------------------------------

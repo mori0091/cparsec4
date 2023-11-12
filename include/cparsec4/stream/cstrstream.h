@@ -8,12 +8,12 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#ifndef PARSEC_STREAM_CSTRSTREAM_H_
-#define PARSEC_STREAM_CSTRSTREAM_H_
+#ifndef CPARSEC4_STREAM_CSTRSTREAM_H_
+#define CPARSEC4_STREAM_CSTRSTREAM_H_
 
-#include "parsec/error/unexpectedparse.h"
-#include "parsec/stream.h"
-#include "parsec/streamerror.h"
+#include "cparsec4/error/unexpectedparse.h"
+#include "cparsec4/stream.h"
+#include "cparsec4/streamerror.h"
 
 // ---------------------------------------------------------------------
 #include "cstr.h"
@@ -27,8 +27,4 @@
 def_StreamErrorFor(CStr);
 def_Stream(CStr);
 
-// ---------------------------------------------------------------------
-#if defined(IMPLEMENT)
-#endif
-
-#endif // PARSEC_STREAM_CSTRSTREAM_H_
+#endif // CPARSEC4_STREAM_CSTRSTREAM_H_
