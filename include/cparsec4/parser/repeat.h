@@ -13,7 +13,7 @@
 
 #include "cparsec4/parser.h"
 #include "cparsec4/stream.h"
-#include "vec.h"
+#include "tgc/vec.h"
 
 #define ParserRepeat(I, O) TYPE_NAME(ParserRepeat, I, O)
 

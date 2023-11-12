@@ -13,7 +13,7 @@
 
 #include "cparsec4/error/unexpectedparse.h"
 #include "cparsec4/stream/slicestream.h"
-#include "primitive.h"
+#include "tgc/primitive.h"
 
 require_type(Slice(char));
 

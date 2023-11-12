@@ -18,16 +18,16 @@ typedef enum UnexpectedParse {
   Unexpected,
 } UnexpectedParse;
 
-#include "copy.h"
+#include "tgc/copy.h"
 def_Copy(UnexpectedParse);
 
-#include "eq.h"
+#include "tgc/eq.h"
 def_Eq(UnexpectedParse);
 
-#include "fmt/debug.h"
+#include "tgc/fmt/debug.h"
 def_Debug(UnexpectedParse);
 
-#include "fmt/display.h"
+#include "tgc/fmt/display.h"
 def_Display(UnexpectedParse);
 
 // ---------------------------------------------------------------------

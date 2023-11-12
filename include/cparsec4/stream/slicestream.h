@@ -15,7 +15,7 @@
 #include "cparsec4/streamerror.h"
 
 // ---------------------------------------------------------------------
-#include "slice.h"
+#include "tgc/slice.h"
 
 /**
  * Implement `trait(Stream(Slice(T)))` to use `Slice(T)` as input stream.

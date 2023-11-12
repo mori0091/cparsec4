@@ -16,8 +16,8 @@
 #include "cparsec4/streamerror.h"
 
 // ---------------------------------------------------------------------
-#include "cstr.h"
-#include "utf8.h"
+#include "tgc/cstr.h"
+#include "tgc/utf8.h"
 
 #define TOKEN_CStr      JUST(Char)
 #define CHUNK_CStr      JUST(CStr)

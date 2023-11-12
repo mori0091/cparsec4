@@ -8,11 +8,11 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#include "char.h"
-#include "cstr.h"
-#include "cstring.h"
-#include "primitive.h"
-#include "unit.h"
+#include "tgc/char.h"
+#include "tgc/cstr.h"
+#include "tgc/cstring.h"
+#include "tgc/primitive.h"
+#include "tgc/unit.h"
 
 #if 0
 // ---------------------------------------------------------------------
@@ -47,7 +47,7 @@
 #define E          StreamError(Token, Chunk, Error)
 
 #define IMPLEMENT
-#include "vec.h"
+#include "tgc/vec.h"
 use_Vec(Token);
 
 #include "cparsec4/parser.h"
@@ -59,10 +59,10 @@ use_Parser(Input, Vec(Token));
 #define PRESULT(O)   ParseResult(Input, O)
 
 #define TYPES_FOR_EQ JUST(Char, CStr, CString, PRESULT(Token), Error)
-#include "g_assert.h"
+#include "tgc/g_assert.h"
 
 #define TYPES_FOR_DISPLAY JUST(PRESULT(Token), PRESULT(Vec(Token)), Error)
-#include "fmt/print.h"
+#include "tgc/fmt/print.h"
 
 // ---------------------------------------------------------------------
 #include "cparsec4/parser/token.h"

@@ -11,7 +11,7 @@
 #ifndef CPARSEC4_STREAMERROR_H_
 #define CPARSEC4_STREAMERROR_H_
 
-#include "cstring.h"
+#include "tgc/cstring.h"
 
 #define StreamError(Token, Chunk, Error)                                 \
   TYPE_NAME(StreamError, TYPEOF(Token), TYPEOF(Chunk), TYPEOF(Error))

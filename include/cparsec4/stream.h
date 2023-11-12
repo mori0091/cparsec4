@@ -11,7 +11,7 @@
 #ifndef CPARSEC4_STREAM_H_
 #define CPARSEC4_STREAM_H_
 
-#include "result.h"
+#include "tgc/result.h"
 
 #define Stream(I)          TYPE_NAME(Stream, TYPEOF(I))
 #define StreamResult(T, E) TYPE_NAME(StreamResult, TYPEOF(T), TYPEOF(E))

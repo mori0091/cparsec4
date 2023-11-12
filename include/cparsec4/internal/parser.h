@@ -11,14 +11,14 @@
 #ifndef CPARSEC4_INTERNAL_PARSER_H_
 #define CPARSEC4_INTERNAL_PARSER_H_
 
-#include "copy.h"
-#include "core.h"
-#include "eq.h"
-#include "fmt/debug.h"
-#include "fmt/display.h"
-#include "fmt/print.h"
-#include "function.h"
-#include "unit.h"
+#include "tgc/copy.h"
+#include "tgc/core.h"
+#include "tgc/eq.h"
+#include "tgc/fmt/debug.h"
+#include "tgc/fmt/display.h"
+#include "tgc/fmt/print.h"
+#include "tgc/function.h"
+#include "tgc/unit.h"
 
 #undef ParseResult
 #define ParseResult(I, O) TYPE_NAME(ParseResult, TYPEOF(I), TYPEOF(O))
