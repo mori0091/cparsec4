@@ -1,5 +1,5 @@
 -std=c2x
 -I./include
--I./cppmp/include
 -I./tgc/include
+-I./tgc/cppmp/include
 -Wall
