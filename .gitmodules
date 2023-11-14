@@ -4,3 +4,4 @@
 [submodule "tgc"]
 	path = tgc
 	url = ../tgc.git
+	branch = main
