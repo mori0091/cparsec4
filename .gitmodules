@@ -3,4 +3,4 @@
 	url = https://github.com/jothepro/doxygen-awesome-css.git
 [submodule "tgc"]
 	path = tgc
-	url = git@github.com:mori0091/tgc.git
+	url = ../tgc.git
