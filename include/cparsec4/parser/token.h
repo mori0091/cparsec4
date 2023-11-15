@@ -55,7 +55,7 @@
 
 #define impl_ParserToken_Satisfy(I)                                      \
   impl_parser(I, TOKEN(I), FUNC_NAME(Satisfy, ParserToken(I)),           \
-              Predicate(Token)) {                                        \
+              Predicate(TOKEN(I))) {                                     \
     CHECKPOINT(I) checkpoint = trait(Stream(I)).checkpoint(&INPUT);      \
     StreamResult(TOKEN(I), ERROR(I)) r =                                 \
       trait(Stream(I)).take_one(&INPUT);                                 \
