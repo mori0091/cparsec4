@@ -8,16 +8,12 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#include "tgc/char.h"
-#include "tgc/cstr.h"
-#include "tgc/cstring.h"
-#include "tgc/primitive.h"
-#include "tgc/unit.h"
+#include "tgc/prelude.h"
 
-#if 0
 // ---------------------------------------------------------------------
+#if 0
 #include "cparsec4/stream/charstream.h"
-#define Input Slice(char)
+#define CPARSEC4_INPUT_TYPE Slice(char)
 
 #include <string.h>
 #define STR(s) (trait(Slice(char)).from(strlen(s), (s)))
@@ -32,46 +28,20 @@
 #else
 
 #include "cparsec4/stream/cstrstream.h"
-#define Input  CStr
-#define STR(s) cstr(s)
-#define CHR(c) cstr(c)
+#define CPARSEC4_INPUT_TYPE CStr
+#define STR(s)              cstr(s)
+#define CHR(c)              cstr(c)
 
 #endif
 
 // ---------------------------------------------------------------------
-#define Token      TOKEN(Input)
+#define Input      CPARSEC4_INPUT_TYPE
+#define Tok        TOKEN(Input)
 #define Chunk      CHUNK(Input)
 #define Error      ERROR(Input)
 #define CheckPoint CHECKPOINT(Input)
 
-#define E          StreamError(Token, Chunk, Error)
-
-#define IMPLEMENT
-#include "tgc/vec.h"
-use_Vec(Token);
-
-#include "cparsec4/parser.h"
-use_Parser(Input, Unit);
-use_Parser(Input, Token);
-use_Parser(Input, Vec(Token));
-
-#define PARSER(O)    Parser(Input, O)
-#define PRESULT(O)   ParseResult(Input, O)
-
-#define TYPES_FOR_EQ JUST(Char, CStr, CString, PRESULT(Token), Error)
-#include "tgc/g_assert.h"
-
-#define TYPES_FOR_DISPLAY JUST(PRESULT(Token), PRESULT(Vec(Token)), Error)
-#include "tgc/fmt/print.h"
-
-// ---------------------------------------------------------------------
-#include "cparsec4/parser/token.h"
-
-use_recursive_Fn(Token, Token, bool);
-use_ParserToken(Input);
-
-#include "cparsec4/parser/repeat.h"
-use_ParserRepeat(Input, Token);
+#define E          StreamError(Tok, Chunk, Error)
 
 // ---------------------------------------------------------------------
 #define PARSER_OUTPUT_TYPES(I)                                           \
@@ -79,37 +49,43 @@ use_ParserRepeat(Input, Token);
 #define PARSER_OUTPUT_TYPES_1(I) Unit, TOKEN(I), CHUNK(I)
 #define PARSER_OUTPUT_TYPES_2(I) APPLY(Vec, PARSER_OUTPUT_TYPES_1(I))
 
-#define PARSER_ARGS(I)           BIND(I, PARSER_OUTPUT_TYPES(I))
-#define PARSER_ARGS_1(I)         BIND(I, PARSER_OUTPUT_TYPES_1(I))
-#define PARSER_ARGS_2(I)         BIND(I, PARSER_OUTPUT_TYPES_2(I))
-
-def_Vec(Unit);
-// def_Parser(Input, Unit);
-def_Parser(Input, Vec(Unit));
-def_ParserRepeat(Input, Unit);
-
-def_Vec(Chunk);
-def_Parser(Input, Chunk);
-def_Parser(Input, Vec(Chunk));
-def_ParserRepeat(Input, Chunk);
+#define PARSER_INOUT_TYPES(I)    BIND(I, PARSER_OUTPUT_TYPES(I))
+#define PARSER_INOUT_TYPES_1(I)  BIND(I, PARSER_OUTPUT_TYPES_1(I))
+#define PARSER_INOUT_TYPES_2(I)  BIND(I, PARSER_OUTPUT_TYPES_2(I))
 
 // ---------------------------------------------------------------------
-#define CPARSEC_INPUT_TYPE      Input
+#define CPARSEC4_PARSER_OUTPUT_TYPES()                                   \
+  PARSER_OUTPUT_TYPES(CPARSEC4_INPUT_TYPE)
+#define CPARSEC4_PARSER_OUTPUT_TYPES_1()                                 \
+  PARSER_OUTPUT_TYPES_1(CPARSEC4_INPUT_TYPE)
+#define CPARSEC4_PARSER_OUTPUT_TYPES_2()                                 \
+  PARSER_OUTPUT_TYPES_2(CPARSEC4_INPUT_TYPE)
 
-#define CPARSEC_PARSER_ARGS()   PARSER_ARGS(CPARSEC_INPUT_TYPE)
-#define CPARSEC_PARSER_ARGS_1() PARSER_ARGS_1(CPARSEC_INPUT_TYPE)
-#define CPARSEC_PARSER_ARGS_2() PARSER_ARGS_2(CPARSEC_INPUT_TYPE)
+#define CPARSEC4_PARSER_INOUT_TYPES()                                    \
+  PARSER_INOUT_TYPES(CPARSEC4_INPUT_TYPE)
+#define CPARSEC4_PARSER_INOUT_TYPES_1()                                  \
+  PARSER_INOUT_TYPES_1(CPARSEC4_INPUT_TYPE)
+#define CPARSEC4_PARSER_INOUT_TYPES_2()                                  \
+  PARSER_INOUT_TYPES_2(CPARSEC4_INPUT_TYPE)
 
 // ---------------------------------------------------------------------
+#include "cparsec4/parser.h"
+
 #define GENERIC_PARSER(p)                                                \
-  GENERIC((p), Parser, trait_Parser, CPARSEC_PARSER_ARGS())
+  GENERIC((p), Parser, trait_Parser, CPARSEC4_PARSER_INOUT_TYPES())
 #define trait_Parser(I, O)    trait(Parser(I, O))
 
 #define g_run_parse(p, input) GENERIC_PARSER(p).run_parse((p), (input))
 #define g_parse(p, input)     GENERIC_PARSER(p).parse((p), (input))
 
+FOREACH(def_Parser, CPARSEC4_PARSER_INOUT_TYPES());
+
+FOREACH(impl_Parser, CPARSEC4_PARSER_INOUT_TYPES());
+
 // ---------------------------------------------------------------------
-#define PARSER_TOKEN()       trait_ParserToken(CPARSEC_INPUT_TYPE)
+#include "cparsec4/parser/token.h"
+
+#define PARSER_TOKEN()       trait_ParserToken(CPARSEC4_INPUT_TYPE)
 #define trait_ParserToken(I) trait(ParserToken(I))
 
 #define satisfy(predicate)   PARSER_TOKEN().Satisfy(predicate)
@@ -117,76 +93,100 @@ def_ParserRepeat(Input, Chunk);
 #define token(c)             PARSER_TOKEN().Token(c)
 #define eof()                PARSER_TOKEN().Eof()
 
-// ---------------------------------------------------------------------
-#define PARSER_REPEAT(p)                                                 \
-  GENERIC((p), Parser, trait_ParserRepeat, CPARSEC_PARSER_ARGS_1())
-#define trait_ParserRepeat(I, O) trait(ParserRepeat(I, O))
+def_recursive_Fn(Tok, Tok, bool);
+def_ParserToken(CPARSEC4_INPUT_TYPE);
+
+impl_recursive_Fn(Tok, Tok, bool);
+impl_ParserToken(CPARSEC4_INPUT_TYPE);
 
 // ---------------------------------------------------------------------
-#define many(p)  PARSER_REPEAT(p).Many(p)
-#define many1(p) PARSER_REPEAT(p).Many1(p)
+#include "cparsec4/parser/repeat.h"
+
+#define PARSER_REPEAT(p)                                                 \
+  GENERIC((p), Parser, trait_ParserRepeat,                               \
+          CPARSEC4_PARSER_INOUT_TYPES_1())
+#define trait_ParserRepeat(I, O) trait(ParserRepeat(I, O))
+
+#define many(p)                  PARSER_REPEAT(p).Many(p)
+#define many1(p)                 PARSER_REPEAT(p).Many1(p)
+
+FOREACH(def_ParserRepeat, CPARSEC4_PARSER_INOUT_TYPES_1());
+
+FOREACH(impl_ParserRepeat, CPARSEC4_PARSER_INOUT_TYPES_1());
+
+// ---------------------------------------------------------------------
+#define PARSER(O)  Parser(Input, O)
+#define PRESULT(O) ParseResult(Input, O)
+
+// #define IMPLEMENT
+
+#define TYPES_FOR_EQ JUST(Char, CStr, CString, PRESULT(Tok), Error)
+#include "tgc/g_assert.h"
+
+#define TYPES_FOR_DISPLAY JUST(PRESULT(Tok), PRESULT(Vec(Tok)), Error)
+#include "tgc/fmt/print.h"
 
 // ---------------------------------------------------------------------
 static void test_parser0(void) {
   Input input = STR("Hello / こんにちは");
   PARSER(Unit) eof = eof();
-  PARSER(Vec(Token)) ps = many(any());
+  PARSER(Vec(Tok)) ps = many(any());
   {
-    PRESULT(Vec(Token)) r = g_parse(ps, input);
+    PRESULT(Vec(Tok)) r = g_parse(ps, input);
     PRESULT(Unit) r2 = g_parse(eof, r.input);
     println(r);
     trait(Drop(PRESULT(Unit))).drop(&r2);
-    trait(Drop(PRESULT(Vec(Token)))).drop(&r);
+    trait(Drop(PRESULT(Vec(Tok)))).drop(&r);
   }
-  trait(Drop(PARSER(Vec(Token)))).drop(&ps);
+  trait(Drop(PARSER(Vec(Tok)))).drop(&ps);
   trait(Drop(PARSER(Unit))).drop(&eof);
 }
 
 static void test_parser1(void) {
   Input input = STR("Hello / こんにちは");
-  PARSER(Token) p = any();
-  PRESULT(Token) r = g_parse(p, input);
+  PARSER(Tok) p = any();
+  PRESULT(Tok) r = g_parse(p, input);
   while (!r.is_err) {
     print("'", r.ok, "', ");
     r = g_parse(p, r.input);
   }
   println(r.err);
-  trait(Drop(PRESULT(Token))).drop(&r);
-  trait(Drop(PARSER(Token))).drop(&p);
+  trait(Drop(PRESULT(Tok))).drop(&r);
+  trait(Drop(PARSER(Tok))).drop(&p);
 }
 
 static void test_parser2(void) {
-  Scoped(PARSER(Token)) p = token(CHR("a"));
+  Scoped(PARSER(Tok)) p = token(CHR("a"));
   {
-    Scoped(PRESULT(Token)) expect =
-      trait(PRESULT(Token)).Ok(STR("abc"), CHR("a"));
-    Scoped(PRESULT(Token)) actual = g_parse(p, STR("aabc"));
+    Scoped(PRESULT(Tok)) expect =
+      trait(PRESULT(Tok)).Ok(STR("abc"), CHR("a"));
+    Scoped(PRESULT(Tok)) actual = g_parse(p, STR("aabc"));
     assert_eq(expect, actual);
   }
   {
-    Scoped(PRESULT(Token)) expect =
-      trait(PRESULT(Token)).Ok(STR("bc"), CHR("a"));
-    Scoped(PRESULT(Token)) actual = g_parse(p, STR("abc"));
+    Scoped(PRESULT(Tok)) expect =
+      trait(PRESULT(Tok)).Ok(STR("bc"), CHR("a"));
+    Scoped(PRESULT(Tok)) actual = g_parse(p, STR("abc"));
     assert_eq(expect, actual);
   }
   {
-    Scoped(PRESULT(Token)) expect =
-      trait(PRESULT(Token))
+    Scoped(PRESULT(Tok)) expect =
+      trait(PRESULT(Tok))
         .Err(STR("bc"), trait(E).unexpected_token(CHR("b")));
-    Scoped(PRESULT(Token)) actual = g_parse(p, STR("bc"));
+    Scoped(PRESULT(Tok)) actual = g_parse(p, STR("bc"));
     assert_eq(expect, actual);
   }
   {
-    Scoped(PRESULT(Token)) expect =
-      trait(PRESULT(Token))
+    Scoped(PRESULT(Tok)) expect =
+      trait(PRESULT(Tok))
         .Err(STR("c"), trait(E).unexpected_token(CHR("c")));
-    Scoped(PRESULT(Token)) actual = g_parse(p, STR("c"));
+    Scoped(PRESULT(Tok)) actual = g_parse(p, STR("c"));
     assert_eq(expect, actual);
   }
   {
-    Scoped(PRESULT(Token)) expect =
-      trait(PRESULT(Token)).Err(STR(""), trait(E).end_of_input());
-    Scoped(PRESULT(Token)) actual = g_parse(p, STR(""));
+    Scoped(PRESULT(Tok)) expect =
+      trait(PRESULT(Tok)).Err(STR(""), trait(E).end_of_input());
+    Scoped(PRESULT(Tok)) actual = g_parse(p, STR(""));
     assert_eq(expect, actual);
   }
 }
