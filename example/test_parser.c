@@ -191,7 +191,12 @@ static void test_parser2(void) {
   }
 }
 
+#include <stdlib.h>
+#include <locale.h>
+
 int main(void) {
+  setlocale(LC_ALL, getenv("LANG"));
+
   test_parser0();
   test_parser1();
   test_parser2();
