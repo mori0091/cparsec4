@@ -29,7 +29,7 @@
 #endif
 
 #define def_ParserToken(I)                                               \
-  require_type(Fn(TOKEN(I), TOKEN(I), bool));                            \
+  def_recursive_Fn(TOKEN(I), TOKEN(I), bool);                            \
   require_trait(Parser(I, TOKEN(I)));                                    \
   require_trait(Parser(I, Unit));                                        \
                                                                          \
@@ -41,6 +41,7 @@
   }
 
 #define impl_ParserToken(I)                                              \
+  impl_recursive_Fn(TOKEN(I), TOKEN(I), bool);                           \
   impl_ParserToken_Satisfy(I);                                           \
   impl_ParserToken_Any(I);                                               \
   impl_ParserToken_Token(I);                                             \

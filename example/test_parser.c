@@ -93,10 +93,8 @@ FOREACH(impl_Parser, CPARSEC4_PARSER_INOUT_TYPES());
 #define token(c)             PARSER_TOKEN().Token(c)
 #define eof()                PARSER_TOKEN().Eof()
 
-def_recursive_Fn(Tok, Tok, bool);
 def_ParserToken(CPARSEC4_INPUT_TYPE);
 
-impl_recursive_Fn(Tok, Tok, bool);
 impl_ParserToken(CPARSEC4_INPUT_TYPE);
 
 // ---------------------------------------------------------------------
