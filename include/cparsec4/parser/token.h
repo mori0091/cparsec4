@@ -55,8 +55,8 @@
   }
 
 #define impl_ParserToken_Satisfy(I)                                      \
-  impl_parser(I, TOKEN(I), FUNC_NAME(Satisfy, ParserToken(I)),           \
-              Predicate(TOKEN(I))) {                                     \
+  parser(I, TOKEN(I), FUNC_NAME(Satisfy, ParserToken(I)),                \
+         Predicate(TOKEN(I))) {                                          \
     CHECKPOINT(I) checkpoint = trait(Stream(I)).checkpoint(&INPUT);      \
     StreamResult(TOKEN(I), ERROR(I)) r =                                 \
       trait(Stream(I)).take_one(&INPUT);                                 \
@@ -79,7 +79,7 @@
   END_OF_STATEMENT
 
 #define impl_ParserToken_Any(I)                                          \
-  impl_parser(I, TOKEN(I), FUNC_NAME(Any, ParserToken(I))) {             \
+  parser(I, TOKEN(I), FUNC_NAME(Any, ParserToken(I))) {                  \
     StreamResult(TOKEN(I), ERROR(I)) r =                                 \
       trait(Stream(I)).take_one(&INPUT);                                 \
     if (r.is_err) {                                                      \
@@ -100,7 +100,7 @@
   END_OF_STATEMENT
 
 #define impl_ParserToken_Eof(I)                                          \
-  impl_parser(I, Unit, FUNC_NAME(Eof, ParserToken(I))) {                 \
+  parser(I, Unit, FUNC_NAME(Eof, ParserToken(I))) {                      \
     CHECKPOINT(I) cp = trait(Stream(I)).checkpoint(&INPUT);              \
     StreamResult(TOKEN(I), ERROR(I)) r =                                 \
       trait(Stream(I)).take_one(&INPUT);                                 \

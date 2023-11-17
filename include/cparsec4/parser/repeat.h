@@ -44,8 +44,7 @@
   }
 
 #define impl_ParserRepeat_Many(I, O)                                     \
-  impl_parser(I, Vec(O), FUNC_NAME(Many, ParserRepeat(I, O)),            \
-              Parser(I, O)) {                                            \
+  parser(I, Vec(O), FUNC_NAME(Many, ParserRepeat(I, O)), Parser(I, O)) { \
     Vec(O) v = {0};                                                      \
     bool consumed = false;                                               \
     for (;;) {                                                           \

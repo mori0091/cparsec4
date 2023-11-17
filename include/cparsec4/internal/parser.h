@@ -213,14 +213,14 @@
     .parse = FUNC_NAME(parse, Parser(I, O)),                             \
   }
 
-#undef impl_parser
-#define impl_parser(...) impl_parser_(__VA_ARGS__)
-#define impl_parser_(I, O, ...)                                          \
-  CAT(impl_parser, VARIADIC_SIZE(__VA_ARGS__))(I, O, __VA_ARGS__)
+#undef parser
+#define parser(...) parser_(__VA_ARGS__)
+#define parser_(I, O, ...)                                               \
+  CAT(parser, VARIADIC_SIZE(__VA_ARGS__))(I, O, __VA_ARGS__)
 
 #define UnParserFnEnv(I, O, name) Tuple(ParserParam_##name, I)
 
-#define impl_parser1(I, O, name)                                         \
+#define parser1(I, O, name)                                              \
   typedef Unit ParserParam_##name;                                       \
   enum { METADATA(ParserParam_##name) = 0 };                             \
   def_Drop(ParserParam_##name);                                          \
@@ -239,7 +239,7 @@
   }                                                                      \
   fn(name##_ctor_, ParserParam_##name, UnParserArgs(I, O)) /* {...} */
 
-#define impl_parser2(I, O, name, T1)                                     \
+#define parser2(I, O, name, T1)                                          \
   typedef Tuple(T1) ParserParam_##name;                                  \
   enum { METADATA(ParserParam_##name) = E_DROP & METADATA(T1) };         \
   def_Drop(ParserParam_##name);                                          \
@@ -268,7 +268,7 @@
   }                                                                      \
   fn(name##_ctor_, ParserParam_##name, UnParserArgs(I, O)) /* {...} */
 
-#define impl_parser3(I, O, name, T1, T2)                                 \
+#define parser3(I, O, name, T1, T2)                                      \
   typedef Tuple(T1, T2) ParserParam_##name;                              \
   enum {                                                                 \
     METADATA(ParserParam_##name) =                                       \
@@ -302,7 +302,7 @@
   }                                                                      \
   fn(name##_ctor_, ParserParam_##name, UnParserArgs(I, O)) /* {...} */
 
-#define impl_parser4(I, O, name, T1, T2, T3)                             \
+#define parser4(I, O, name, T1, T2, T3)                                  \
   typedef Tuple(T1, T2, T3) ParserParam_##name;                          \
   enum {                                                                 \
     METADATA(ParserParam_##name) =                                       \
