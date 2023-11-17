@@ -8,8 +8,6 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#include "tgc/prelude.h"
-
 // ---------------------------------------------------------------------
 #if 0
 #include "cparsec4/stream/charstream.h"
@@ -41,88 +39,13 @@
 #define Error      ERROR(Input)
 #define CheckPoint CHECKPOINT(Input)
 
-#define E          StreamError(Tok, Chunk, Error)
+#define E          StreamErrorFor(Input)
 
-// ---------------------------------------------------------------------
-#define PARSER_OUTPUT_TYPES(I)                                           \
-  PARSER_OUTPUT_TYPES_1(I), PARSER_OUTPUT_TYPES_2(I)
-#define PARSER_OUTPUT_TYPES_1(I) Unit, TOKEN(I), CHUNK(I)
-#define PARSER_OUTPUT_TYPES_2(I) APPLY(Vec, PARSER_OUTPUT_TYPES_1(I))
-
-#define PARSER_INOUT_TYPES(I)    BIND(I, PARSER_OUTPUT_TYPES(I))
-#define PARSER_INOUT_TYPES_1(I)  BIND(I, PARSER_OUTPUT_TYPES_1(I))
-#define PARSER_INOUT_TYPES_2(I)  BIND(I, PARSER_OUTPUT_TYPES_2(I))
-
-// ---------------------------------------------------------------------
-#define CPARSEC4_PARSER_OUTPUT_TYPES()                                   \
-  PARSER_OUTPUT_TYPES(CPARSEC4_INPUT_TYPE)
-#define CPARSEC4_PARSER_OUTPUT_TYPES_1()                                 \
-  PARSER_OUTPUT_TYPES_1(CPARSEC4_INPUT_TYPE)
-#define CPARSEC4_PARSER_OUTPUT_TYPES_2()                                 \
-  PARSER_OUTPUT_TYPES_2(CPARSEC4_INPUT_TYPE)
-
-#define CPARSEC4_PARSER_INOUT_TYPES()                                    \
-  PARSER_INOUT_TYPES(CPARSEC4_INPUT_TYPE)
-#define CPARSEC4_PARSER_INOUT_TYPES_1()                                  \
-  PARSER_INOUT_TYPES_1(CPARSEC4_INPUT_TYPE)
-#define CPARSEC4_PARSER_INOUT_TYPES_2()                                  \
-  PARSER_INOUT_TYPES_2(CPARSEC4_INPUT_TYPE)
-
-// ---------------------------------------------------------------------
-#include "cparsec4/parser.h"
-
-#define GENERIC_PARSER(p)                                                \
-  GENERIC((p), Parser, trait_Parser, CPARSEC4_PARSER_INOUT_TYPES())
-#define trait_Parser(I, O)    trait(Parser(I, O))
-
-#define g_run_parse(p, input) GENERIC_PARSER(p).run_parse((p), (input))
-#define g_parse(p, input)     GENERIC_PARSER(p).parse((p), (input))
-
-FOREACH(def_Parser, CPARSEC4_PARSER_INOUT_TYPES());
-
-FOREACH(impl_Parser, CPARSEC4_PARSER_INOUT_TYPES());
-
-// ---------------------------------------------------------------------
-#include "cparsec4/parser/token.h"
-
-#define PARSER_TOKEN()       trait_ParserToken(CPARSEC4_INPUT_TYPE)
-#define trait_ParserToken(I) trait(ParserToken(I))
-
-#define satisfy(predicate)   PARSER_TOKEN().Satisfy(predicate)
-#define any()                PARSER_TOKEN().Any()
-#define token(c)             PARSER_TOKEN().Token(c)
-#define eof()                PARSER_TOKEN().Eof()
-
-def_ParserToken(CPARSEC4_INPUT_TYPE);
-
-impl_ParserToken(CPARSEC4_INPUT_TYPE);
-
-// ---------------------------------------------------------------------
-#include "cparsec4/parser/repeat.h"
-
-#define PARSER_REPEAT(p)                                                 \
-  GENERIC((p), Parser, trait_ParserRepeat,                               \
-          CPARSEC4_PARSER_INOUT_TYPES_1())
-#define trait_ParserRepeat(I, O) trait(ParserRepeat(I, O))
-
-#define many(p)                  PARSER_REPEAT(p).Many(p)
-#define many1(p)                 PARSER_REPEAT(p).Many1(p)
-
-FOREACH(def_ParserRepeat, CPARSEC4_PARSER_INOUT_TYPES_1());
-
-FOREACH(impl_ParserRepeat, CPARSEC4_PARSER_INOUT_TYPES_1());
-
-// ---------------------------------------------------------------------
 #define PARSER(O)  Parser(Input, O)
 #define PRESULT(O) ParseResult(Input, O)
 
-// #define IMPLEMENT
-
-#define TYPES_FOR_EQ JUST(Char, CStr, CString, PRESULT(Tok), Error)
-#include "tgc/g_assert.h"
-
-#define TYPES_FOR_DISPLAY JUST(PRESULT(Tok), PRESULT(Vec(Tok)), Error)
-#include "tgc/fmt/print.h"
+// ---------------------------------------------------------------------
+#include "cparsec4/prelude.h"
 
 // ---------------------------------------------------------------------
 static void test_parser0(void) {
@@ -133,11 +56,11 @@ static void test_parser0(void) {
     PRESULT(Vec(Tok)) r = g_parse(ps, input);
     PRESULT(Unit) r2 = g_parse(eof, r.input);
     println(r);
-    trait(Drop(PRESULT(Unit))).drop(&r2);
-    trait(Drop(PRESULT(Vec(Tok)))).drop(&r);
+    g_drop(r2);
+    g_drop(r);
   }
-  trait(Drop(PARSER(Vec(Tok)))).drop(&ps);
-  trait(Drop(PARSER(Unit))).drop(&eof);
+  g_drop(ps);
+  g_drop(eof);
 }
 
 static void test_parser1(void) {
@@ -149,8 +72,8 @@ static void test_parser1(void) {
     r = g_parse(p, r.input);
   }
   println(r.err);
-  trait(Drop(PRESULT(Tok))).drop(&r);
-  trait(Drop(PARSER(Tok))).drop(&p);
+  g_drop(r);
+  g_drop(p);
 }
 
 static void test_parser2(void) {
@@ -189,8 +112,8 @@ static void test_parser2(void) {
   }
 }
 
-#include <stdlib.h>
 #include <locale.h>
+#include <stdlib.h>
 
 int main(void) {
   setlocale(LC_ALL, getenv("LANG"));
