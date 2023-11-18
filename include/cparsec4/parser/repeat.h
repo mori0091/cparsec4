@@ -52,19 +52,17 @@
         trait(Parser(I, O)).run_parser(PARAM._0, INPUT);                 \
       INPUT = r.result.input;                                            \
       consumed |= r.consumed;                                            \
-      if (!r.result.is_err) {                                            \
-        trait(Vec(O)).push(&v, r.result.ok);                             \
-      } else {                                                           \
+      if (r.result.is_err) {                                             \
         if (r.consumed) {                                                \
           trait(Drop(Vec(O))).drop(&v);                                  \
           CONSUMED_ERR(I, Vec(O), r.result.err);                         \
-        } else {                                                         \
-          if (IS_DROP(ParseReply(I, O))) {                               \
-            trait(Drop(ParseReply(I, O))).drop(&r);                      \
-          }                                                              \
-          break;                                                         \
         }                                                                \
+        if (IS_DROP(ParseReply(I, O))) {                                 \
+          trait(Drop(ParseReply(I, O))).drop(&r);                        \
+        }                                                                \
+        break;                                                           \
       }                                                                  \
+      trait(Vec(O)).push(&v, r.result.ok);                               \
     }                                                                    \
     if (consumed) {                                                      \
       CONSUMED_OK(I, Vec(O), v);                                         \
