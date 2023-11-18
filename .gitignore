@@ -9,3 +9,6 @@
 /lib
 /obj
 /tmp
+/**/a.out
+/**/a.exe
+/html
