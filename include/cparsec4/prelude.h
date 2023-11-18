@@ -11,6 +11,9 @@
 #ifndef CPARSEC4_PRELUDE_H_
 #define CPARSEC4_PRELUDE_H_
 
+// ---------------------------------------------------------------------
+// #define CPARSEC4_INPUT_TYPE CStr
+
 #if !defined(CPARSEC4_INPUT_TYPE)
 #warning "CPARSEC4_INPUT_TYPE is not defined. (CStr is assumed)"
 #define CPARSEC4_INPUT_TYPE CStr
@@ -22,12 +25,34 @@
 #include "cparsec4/stream/cstrstream.h"
 
 // ---------------------------------------------------------------------
-#define CPARSEC4_INPUT_TYPES() CStr, Slice(char)
+// #define CPARSEC4_CONFIG_MINIMUM 1
 
+#if (CPARSEC4_CONFIG_MINIMUM)
+#define CPARSEC4_BUILTIN_OUTPUT_TYPES() CPARSEC4_CORE_OUTPUT_TYPES()
+#else
+#define CPARSEC4_BUILTIN_OUTPUT_TYPES() CPARSEC4_STD_OUTPUT_TYPES()
+#endif
+
+#define CPARSEC4_CORE_OUTPUT_TYPES() Unit, Char, CStr, char, Slice(char)
+
+#define CPARSEC4_STD_OUTPUT_TYPES()                                      \
+  CPARSEC4_CORE_OUTPUT_TYPES(), BOOLEAN_TYPES, INTEGER_TYPES,            \
+    REAL_FLOATING_TYPES
+
+// ---------------------------------------------------------------------
+// #define CPARSEC4_CONFIG_USER_OUTPUT_TYPES Foo, Bar
+
+#if defined(CPARSEC4_CONFIG_USER_OUTPUT_TYPES)
+#define CPARSEC4_USER_OUTPUT_TYPES() CPARSEC4_CONFIG_USER_OUTPUT_TYPES
+#else
+#define CPARSEC4_USER_OUTPUT_TYPES()
+#endif
+
+// ---------------------------------------------------------------------
 #define CPARSEC4_OUTPUT_TYPES()                                          \
   CPARSEC4_OUTPUT_TYPES_1(), CPARSEC4_OUTPUT_TYPES_2()
 #define CPARSEC4_OUTPUT_TYPES_1()                                        \
-  Unit, Char, CStr, PRIMITIVE_TYPES, Slice(char)
+  SQUASH(CPARSEC4_USER_OUTPUT_TYPES(), CPARSEC4_BUILTIN_OUTPUT_TYPES())
 #define CPARSEC4_OUTPUT_TYPES_2() APPLY(Vec, CPARSEC4_OUTPUT_TYPES_1())
 
 #define CPARSEC4_INOUT_TYPES()    PARSER_INOUT_TYPES(CPARSEC4_INPUT_TYPE)
@@ -43,21 +68,6 @@
 #define CPARSEC4_REPLY_TYPES()  APPLY(ParseReply, CPARSEC4_INOUT_TYPES())
 #define CPARSEC4_RESULT_TYPES() APPLY(ParseResult, CPARSEC4_INOUT_TYPES())
 #define CPARSEC4_ERROR_TYPES()  UnexpectedParse
-
-// ---------------------------------------------------------------------
-#define CPARSEC4_ALL_INOUT_TYPES()                                       \
-  SEP_BY(COMMA, PARSER_INOUT_TYPES, CPARSEC4_INPUT_TYPES())
-#define CPARSEC4_ALL_INOUT_TYPES_1()                                     \
-  SEP_BY(COMMA, PARSER_INOUT_TYPES_1, CPARSEC4_INPUT_TYPES())
-#define CPARSEC4_ALL_INOUT_TYPES_2()                                     \
-  SEP_BY(COMMA, PARSER_INOUT_TYPES_2, CPARSEC4_INPUT_TYPES())
-
-#define CPARSEC4_ALL_PARSER_TYPES()                                      \
-  APPLY(Parser, CPARSEC4_ALL_INOUT_TYPES())
-#define CPARSEC4_ALL_REPLY_TYPES()                                       \
-  APPLY(ParseReply, CPARSEC4_ALL_INOUT_TYPES())
-#define CPARSEC4_ALL_RESULT_TYPES()                                      \
-  APPLY(ParseResult, CPARSEC4_ALL_INOUT_TYPES())
 
 // ---------------------------------------------------------------------
 #define USING_TYPES                                                      \
