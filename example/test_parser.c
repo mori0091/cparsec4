@@ -112,6 +112,86 @@ static void test_parser2(void) {
   }
 }
 
+static void test_many(void) {
+  PARSER(Vec(Tok)) ps = many(token(CHR("a")));
+  {
+    PRESULT(Vec(Tok)) actual = g_parse(ps, STR("aaa"));
+    PRESULT(Vec(Tok))
+    expect = trait(PRESULT(Vec(Tok)))
+               .Ok(STR(""), vecof(Tok, CHR("a"), CHR("a"), CHR("a")));
+    assert_eq(expect, actual);
+    g_drop(expect);
+    g_drop(actual);
+  }
+  {
+    PRESULT(Vec(Tok)) actual = g_parse(ps, STR("aab"));
+    PRESULT(Vec(Tok))
+    expect = trait(PRESULT(Vec(Tok)))
+               .Ok(STR("b"), vecof(Tok, CHR("a"), CHR("a")));
+    assert_eq(expect, actual);
+    g_drop(expect);
+    g_drop(actual);
+  }
+  {
+    PRESULT(Vec(Tok)) actual = g_parse(ps, STR("b"));
+    PRESULT(Vec(Tok))
+    expect = trait(PRESULT(Vec(Tok))).Ok(STR("b"), (Vec(Tok)){0});
+    assert_eq(expect, actual);
+    g_drop(expect);
+    g_drop(actual);
+  }
+  {
+    PRESULT(Vec(Tok)) actual = g_parse(ps, STR(""));
+    PRESULT(Vec(Tok))
+    expect = trait(PRESULT(Vec(Tok))).Ok(STR(""), (Vec(Tok)){0});
+    assert_eq(expect, actual);
+    g_drop(expect);
+    g_drop(actual);
+  }
+  g_drop(ps);
+}
+
+static void test_many1(void) {
+  PARSER(Vec(Tok)) ps = many1(token(CHR("a")));
+  {
+    PRESULT(Vec(Tok)) actual = g_parse(ps, STR("aaa"));
+    PRESULT(Vec(Tok))
+    expect = trait(PRESULT(Vec(Tok)))
+               .Ok(STR(""), vecof(Tok, CHR("a"), CHR("a"), CHR("a")));
+    assert_eq(expect, actual);
+    g_drop(expect);
+    g_drop(actual);
+  }
+  {
+    PRESULT(Vec(Tok)) actual = g_parse(ps, STR("aab"));
+    PRESULT(Vec(Tok))
+    expect = trait(PRESULT(Vec(Tok)))
+               .Ok(STR("b"), vecof(Tok, CHR("a"), CHR("a")));
+    assert_eq(expect, actual);
+    g_drop(expect);
+    g_drop(actual);
+  }
+  {
+    PRESULT(Vec(Tok)) actual = g_parse(ps, STR("b"));
+    PRESULT(Vec(Tok))
+    expect = trait(PRESULT(Vec(Tok)))
+               .Err(STR("b"), trait(E).unexpected_token(CHR("b")));
+    assert_eq(expect, actual);
+    g_drop(expect);
+    g_drop(actual);
+  }
+  {
+    PRESULT(Vec(Tok)) actual = g_parse(ps, STR(""));
+    PRESULT(Vec(Tok))
+    expect =
+      trait(PRESULT(Vec(Tok))).Err(STR(""), trait(E).end_of_input());
+    assert_eq(expect, actual);
+    g_drop(expect);
+    g_drop(actual);
+  }
+  g_drop(ps);
+}
+
 #include <locale.h>
 #include <stdlib.h>
 
@@ -121,5 +201,8 @@ int main(void) {
   test_parser0();
   test_parser1();
   test_parser2();
+
+  test_many();
+  test_many1();
   return 0;
 }

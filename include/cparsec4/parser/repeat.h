@@ -40,7 +40,7 @@
                                                                          \
   impl_trait(ParserRepeat(I, O)) {                                       \
     .Many = FUNC_NAME(Many, ParserRepeat(I, O)),                         \
-    /* .Many1 = FUNC_NAME(Many1, ParserRepeat(I, O)), */                 \
+    .Many1 = FUNC_NAME(Many1, ParserRepeat(I, O)),                       \
   }
 
 #define impl_ParserRepeat_Many(I, O)                                     \
@@ -72,6 +72,34 @@
   }                                                                      \
   END_OF_STATEMENT
 
-#define impl_ParserRepeat_Many1(I, O) END_OF_STATEMENT
+#define impl_ParserRepeat_Many1(I, O)                                    \
+  parser(I, Vec(O), FUNC_NAME(Many1, ParserRepeat(I, O)),                \
+         Parser(I, O)) {                                                 \
+    Vec(O) v = {0};                                                      \
+    bool consumed = false;                                               \
+    for (;;) {                                                           \
+      ParseReply(I, O) r =                                               \
+        trait(Parser(I, O)).run_parser(PARAM._0, INPUT);                 \
+      INPUT = r.result.input;                                            \
+      consumed |= r.consumed;                                            \
+      if (r.result.is_err) {                                             \
+        if (r.consumed) {                                                \
+          trait(Drop(Vec(O))).drop(&v);                                  \
+          CONSUMED_ERR(I, Vec(O), r.result.err);                         \
+        }                                                                \
+        if (!consumed) {                                                 \
+          EMPTY_ERR(I, Vec(O), r.result.err);                            \
+        }                                                                \
+        if (IS_DROP(ParseReply(I, O))) {                                 \
+          trait(Drop(ParseReply(I, O))).drop(&r);                        \
+        }                                                                \
+        break;                                                           \
+      }                                                                  \
+      trait(Vec(O)).push(&v, r.result.ok);                               \
+    }                                                                    \
+    assert(consumed);                                                    \
+    CONSUMED_OK(I, Vec(O), v);                                           \
+  }                                                                      \
+  END_OF_STATEMENT
 
 #endif // CPARSEC4_PARSER_REPEAT_H_
