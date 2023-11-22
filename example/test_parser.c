@@ -39,7 +39,7 @@
 #define Error      ERROR(Input)
 #define CheckPoint CHECKPOINT(Input)
 
-#define E          StreamErrorFor(Input)
+#define E          trait(StreamErrorFor(Input))
 
 #define PARSER(O)  Parser(Input, O)
 #define PRESULT(O) ParseResult(Input, O)
@@ -81,9 +81,9 @@ static void test_parser2(void) {
   // clang-format off
   g_test_parse_ok (p, STR("aabc"), CHR("a"), STR("abc"));
   g_test_parse_ok (p, STR("abc") , CHR("a"), STR("bc"));
-  g_test_parse_err(p, STR("bc")  , trait(E).unexpected_token(CHR("b")), STR("bc"));
-  g_test_parse_err(p, STR("c")   , trait(E).unexpected_token(CHR("c")), STR("c"));
-  g_test_parse_err(p, STR("")    , trait(E).end_of_input(), STR(""));
+  g_test_parse_err(p, STR("bc")  , E.unexpected_token(CHR("b")), STR("bc"));
+  g_test_parse_err(p, STR("c")   , E.unexpected_token(CHR("c")), STR("c"));
+  g_test_parse_err(p, STR("")    , E.end_of_input(), STR(""));
   // clang-format on
   g_drop(p);
 }
@@ -104,8 +104,8 @@ static void test_many1(void) {
   // clang-format off
   g_test_parse_ok (p, STR("aaa"), vecof(Tok, CHR("a"), CHR("a"), CHR("a")), STR(""));
   g_test_parse_ok (p, STR("aab"), vecof(Tok, CHR("a"), CHR("a")), STR("b"));
-  g_test_parse_err(p, STR("b")  , trait(E).unexpected_token(CHR("b")), STR("b"));
-  g_test_parse_err(p, STR("")   , trait(E).end_of_input(), STR(""));
+  g_test_parse_err(p, STR("b")  , E.unexpected_token(CHR("b")), STR("b"));
+  g_test_parse_err(p, STR("")   , E.end_of_input(), STR(""));
   // clang-format on
   g_drop(p);
 }
