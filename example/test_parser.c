@@ -77,119 +77,37 @@ static void test_parser1(void) {
 }
 
 static void test_parser2(void) {
-  Scoped(PARSER(Tok)) p = token(CHR("a"));
-  {
-    Scoped(PRESULT(Tok)) expect =
-      trait(PRESULT(Tok)).Ok(STR("abc"), CHR("a"));
-    Scoped(PRESULT(Tok)) actual = g_parse(p, STR("aabc"));
-    assert_eq(expect, actual);
-  }
-  {
-    Scoped(PRESULT(Tok)) expect =
-      trait(PRESULT(Tok)).Ok(STR("bc"), CHR("a"));
-    Scoped(PRESULT(Tok)) actual = g_parse(p, STR("abc"));
-    assert_eq(expect, actual);
-  }
-  {
-    Scoped(PRESULT(Tok)) expect =
-      trait(PRESULT(Tok))
-        .Err(STR("bc"), trait(E).unexpected_token(CHR("b")));
-    Scoped(PRESULT(Tok)) actual = g_parse(p, STR("bc"));
-    assert_eq(expect, actual);
-  }
-  {
-    Scoped(PRESULT(Tok)) expect =
-      trait(PRESULT(Tok))
-        .Err(STR("c"), trait(E).unexpected_token(CHR("c")));
-    Scoped(PRESULT(Tok)) actual = g_parse(p, STR("c"));
-    assert_eq(expect, actual);
-  }
-  {
-    Scoped(PRESULT(Tok)) expect =
-      trait(PRESULT(Tok)).Err(STR(""), trait(E).end_of_input());
-    Scoped(PRESULT(Tok)) actual = g_parse(p, STR(""));
-    assert_eq(expect, actual);
-  }
+  PARSER(Tok) p = token(CHR("a"));
+  // clang-format off
+  g_test_parse_ok (p, STR("aabc"), CHR("a"), STR("abc"));
+  g_test_parse_ok (p, STR("abc") , CHR("a"), STR("bc"));
+  g_test_parse_err(p, STR("bc")  , trait(E).unexpected_token(CHR("b")), STR("bc"));
+  g_test_parse_err(p, STR("c")   , trait(E).unexpected_token(CHR("c")), STR("c"));
+  g_test_parse_err(p, STR("")    , trait(E).end_of_input(), STR(""));
+  // clang-format on
+  g_drop(p);
 }
 
 static void test_many(void) {
-  PARSER(Vec(Tok)) ps = many(token(CHR("a")));
-  {
-    PRESULT(Vec(Tok)) actual = g_parse(ps, STR("aaa"));
-    PRESULT(Vec(Tok))
-    expect = trait(PRESULT(Vec(Tok)))
-               .Ok(STR(""), vecof(Tok, CHR("a"), CHR("a"), CHR("a")));
-    assert_eq(expect, actual);
-    g_drop(expect);
-    g_drop(actual);
-  }
-  {
-    PRESULT(Vec(Tok)) actual = g_parse(ps, STR("aab"));
-    PRESULT(Vec(Tok))
-    expect = trait(PRESULT(Vec(Tok)))
-               .Ok(STR("b"), vecof(Tok, CHR("a"), CHR("a")));
-    assert_eq(expect, actual);
-    g_drop(expect);
-    g_drop(actual);
-  }
-  {
-    PRESULT(Vec(Tok)) actual = g_parse(ps, STR("b"));
-    PRESULT(Vec(Tok))
-    expect = trait(PRESULT(Vec(Tok))).Ok(STR("b"), (Vec(Tok)){0});
-    assert_eq(expect, actual);
-    g_drop(expect);
-    g_drop(actual);
-  }
-  {
-    PRESULT(Vec(Tok)) actual = g_parse(ps, STR(""));
-    PRESULT(Vec(Tok))
-    expect = trait(PRESULT(Vec(Tok))).Ok(STR(""), (Vec(Tok)){0});
-    assert_eq(expect, actual);
-    g_drop(expect);
-    g_drop(actual);
-  }
-  g_drop(ps);
+  PARSER(Vec(Tok)) p = many(token(CHR("a")));
+  // clang-format off
+  g_test_parse_ok(p, STR("aaa"), vecof(Tok, CHR("a"), CHR("a"), CHR("a")), STR(""));
+  g_test_parse_ok(p, STR("aab"), vecof(Tok, CHR("a"), CHR("a")), STR("b"));
+  g_test_parse_ok(p, STR("b")  , (Vec(Tok)){0}, STR("b"));
+  g_test_parse_ok(p, STR("")   , (Vec(Tok)){0}, STR(""));
+  // clang-format on
+  g_drop(p);
 }
 
 static void test_many1(void) {
-  PARSER(Vec(Tok)) ps = many1(token(CHR("a")));
-  {
-    PRESULT(Vec(Tok)) actual = g_parse(ps, STR("aaa"));
-    PRESULT(Vec(Tok))
-    expect = trait(PRESULT(Vec(Tok)))
-               .Ok(STR(""), vecof(Tok, CHR("a"), CHR("a"), CHR("a")));
-    assert_eq(expect, actual);
-    g_drop(expect);
-    g_drop(actual);
-  }
-  {
-    PRESULT(Vec(Tok)) actual = g_parse(ps, STR("aab"));
-    PRESULT(Vec(Tok))
-    expect = trait(PRESULT(Vec(Tok)))
-               .Ok(STR("b"), vecof(Tok, CHR("a"), CHR("a")));
-    assert_eq(expect, actual);
-    g_drop(expect);
-    g_drop(actual);
-  }
-  {
-    PRESULT(Vec(Tok)) actual = g_parse(ps, STR("b"));
-    PRESULT(Vec(Tok))
-    expect = trait(PRESULT(Vec(Tok)))
-               .Err(STR("b"), trait(E).unexpected_token(CHR("b")));
-    assert_eq(expect, actual);
-    g_drop(expect);
-    g_drop(actual);
-  }
-  {
-    PRESULT(Vec(Tok)) actual = g_parse(ps, STR(""));
-    PRESULT(Vec(Tok))
-    expect =
-      trait(PRESULT(Vec(Tok))).Err(STR(""), trait(E).end_of_input());
-    assert_eq(expect, actual);
-    g_drop(expect);
-    g_drop(actual);
-  }
-  g_drop(ps);
+  PARSER(Vec(Tok)) p = many1(token(CHR("a")));
+  // clang-format off
+  g_test_parse_ok (p, STR("aaa"), vecof(Tok, CHR("a"), CHR("a"), CHR("a")), STR(""));
+  g_test_parse_ok (p, STR("aab"), vecof(Tok, CHR("a"), CHR("a")), STR("b"));
+  g_test_parse_err(p, STR("b")  , trait(E).unexpected_token(CHR("b")), STR("b"));
+  g_test_parse_err(p, STR("")   , trait(E).end_of_input(), STR(""));
+  // clang-format on
+  g_drop(p);
 }
 
 #include <locale.h>
@@ -204,5 +122,6 @@ int main(void) {
 
   test_many();
   test_many1();
+
   return 0;
 }
