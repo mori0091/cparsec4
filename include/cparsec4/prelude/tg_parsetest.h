@@ -14,8 +14,7 @@
 #include "cparsec4/prelude/tg_parser.h"
 #include "cparsec4/test/parsetest.h"
 
-#define PARSE_TEST(p)                                                    \
-  GENERIC((p), Parser, trait_ParseTest, CPARSEC4_INOUT_TYPES())
+#define PARSE_TEST(p)         P_GENERIC(trait_ParseTest, p)
 #define trait_ParseTest(I, O) trait(ParseTest(I, O))
 
 #define g_test_parse_ok(p_, input_, ok_, rest_)                          \

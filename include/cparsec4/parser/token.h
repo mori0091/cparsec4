@@ -20,6 +20,11 @@
 #define Match(T, U)    Fn(TYPEOF(T), TYPEOF(U), bool)
 #define Predicate(T)   Fn(TYPEOF(T), bool)
 
+#define P_SATISFY(I)   FUNC_NAME(Satisfy, ParserToken(I))
+#define P_ANY(I)       FUNC_NAME(Any, ParserToken(I))
+#define P_TOKEN(I)     FUNC_NAME(Token, ParserToken(I))
+#define P_EOF(I)       FUNC_NAME(Eof, ParserToken(I))
+
 #if !defined(IMPLEMENT)
 #define use_ParserToken(I) def_ParserToken(I)
 #else
@@ -32,6 +37,11 @@
   def_recursive_Fn(TOKEN(I), TOKEN(I), bool);                            \
   require_trait(Parser(I, TOKEN(I)));                                    \
   require_trait(Parser(I, Unit));                                        \
+                                                                         \
+  Parser(I, TOKEN(I)) P_SATISFY(I)(Predicate(TOKEN(I)) predicate);       \
+  Parser(I, TOKEN(I)) P_ANY(I)(void);                                    \
+  Parser(I, TOKEN(I)) P_TOKEN(I)(TOKEN(I) c);                            \
+  Parser(I, Unit) P_EOF(I)(void);                                        \
                                                                          \
   def_trait(ParserToken(I)) {                                            \
     Parser(I, TOKEN(I)) (*Satisfy)(Predicate(TOKEN(I)) predicate);       \
@@ -48,15 +58,12 @@
   impl_ParserToken_Eof(I);                                               \
                                                                          \
   impl_trait(ParserToken(I)) {                                           \
-    .Satisfy = FUNC_NAME(Satisfy, ParserToken(I)),                       \
-    .Any = FUNC_NAME(Any, ParserToken(I)),                               \
-    .Token = FUNC_NAME(Token, ParserToken(I)),                           \
-    .Eof = FUNC_NAME(Eof, ParserToken(I)),                               \
+    .Satisfy = P_SATISFY(I), .Any = P_ANY(I), .Token = P_TOKEN(I),       \
+    .Eof = P_EOF(I),                                                     \
   }
 
 #define impl_ParserToken_Satisfy(I)                                      \
-  parser(I, TOKEN(I), FUNC_NAME(Satisfy, ParserToken(I)),                \
-         Predicate(TOKEN(I))) {                                          \
+  parser(I, TOKEN(I), P_SATISFY(I), Predicate(TOKEN(I))) {               \
     CHECKPOINT(I) checkpoint = trait(Stream(I)).checkpoint(&INPUT);      \
     StreamResult(TOKEN(I), ERROR(I)) r =                                 \
       trait(Stream(I)).take_one(&INPUT);                                 \
@@ -79,7 +86,7 @@
   END_OF_STATEMENT
 
 #define impl_ParserToken_Any(I)                                          \
-  parser(I, TOKEN(I), FUNC_NAME(Any, ParserToken(I))) {                  \
+  parser(I, TOKEN(I), P_ANY(I)) {                                        \
     StreamResult(TOKEN(I), ERROR(I)) r =                                 \
       trait(Stream(I)).take_one(&INPUT);                                 \
     if (r.is_err) {                                                      \
@@ -90,7 +97,7 @@
   END_OF_STATEMENT
 
 #define impl_ParserToken_Token(I)                                        \
-  Parser(I, TOKEN(I)) FUNC_NAME(Token, ParserToken(I))(TOKEN(I) c) {     \
+  Parser(I, TOKEN(I)) P_TOKEN(I)(TOKEN(I) c) {                           \
     Match(TOKEN(I), TOKEN(I)) f =                                        \
       trait(Match(TOKEN(I), TOKEN(I))).from(trait(Eq(TOKEN(I))).eq);     \
     Predicate(TOKEN(I)) predicate = fn_apply(f, c);                      \
@@ -100,7 +107,7 @@
   END_OF_STATEMENT
 
 #define impl_ParserToken_Eof(I)                                          \
-  parser(I, Unit, FUNC_NAME(Eof, ParserToken(I))) {                      \
+  parser(I, Unit, P_EOF(I)) {                                            \
     CHECKPOINT(I) cp = trait(Stream(I)).checkpoint(&INPUT);              \
     StreamResult(TOKEN(I), ERROR(I)) r =                                 \
       trait(Stream(I)).take_one(&INPUT);                                 \

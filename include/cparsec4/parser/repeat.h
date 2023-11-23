@@ -17,6 +17,9 @@
 
 #define ParserRepeat(I, O) TYPE_NAME(ParserRepeat, I, O)
 
+#define P_MANY(I, O)       FUNC_NAME(Many, ParserRepeat(I, O))
+#define P_MANY1(I, O)      FUNC_NAME(Many1, ParserRepeat(I, O))
+
 #if !defined(IMPLEMENT)
 #define use_ParserRepeat(I, O) def_ParserRepeat(I, O)
 #else
@@ -29,6 +32,9 @@
   require_trait(Parser(I, O));                                           \
   require_type(Vec(O));                                                  \
                                                                          \
+  Parser(I, Vec(O)) P_MANY(I, O)(Parser(I, O) p);                        \
+  Parser(I, Vec(O)) P_MANY1(I, O)(Parser(I, O) p);                       \
+                                                                         \
   def_trait(ParserRepeat(I, O)) {                                        \
     Parser(I, Vec(O)) (*Many)(Parser(I, O) p);                           \
     Parser(I, Vec(O)) (*Many1)(Parser(I, O) p);                          \
@@ -39,12 +45,11 @@
   impl_ParserRepeat_Many1(I, O);                                         \
                                                                          \
   impl_trait(ParserRepeat(I, O)) {                                       \
-    .Many = FUNC_NAME(Many, ParserRepeat(I, O)),                         \
-    .Many1 = FUNC_NAME(Many1, ParserRepeat(I, O)),                       \
+    .Many = P_MANY(I, O), .Many1 = P_MANY1(I, O),                        \
   }
 
 #define impl_ParserRepeat_Many(I, O)                                     \
-  parser(I, Vec(O), FUNC_NAME(Many, ParserRepeat(I, O)), Parser(I, O)) { \
+  parser(I, Vec(O), P_MANY(I, O), Parser(I, O)) {                        \
     Vec(O) v = {0};                                                      \
     bool consumed = false;                                               \
     for (;;) {                                                           \
@@ -73,8 +78,7 @@
   END_OF_STATEMENT
 
 #define impl_ParserRepeat_Many1(I, O)                                    \
-  parser(I, Vec(O), FUNC_NAME(Many1, ParserRepeat(I, O)),                \
-         Parser(I, O)) {                                                 \
+  parser(I, Vec(O), P_MANY1(I, O), Parser(I, O)) {                       \
     Vec(O) v = {0};                                                      \
     bool consumed = false;                                               \
     for (;;) {                                                           \

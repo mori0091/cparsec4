@@ -14,13 +14,10 @@
 #include "cparsec4/parser/token.h"
 #include "cparsec4/prelude/tg_parser.h"
 
-#define PARSER_TOKEN()       trait_ParserToken(CPARSEC4_INPUT_TYPE)
-#define trait_ParserToken(I) trait(ParserToken(I))
-
-#define satisfy(predicate)   PARSER_TOKEN().Satisfy(predicate)
-#define any()                PARSER_TOKEN().Any()
-#define token(c)             PARSER_TOKEN().Token(c)
-#define eof()                PARSER_TOKEN().Eof()
+#define satisfy(predicate) P_SATISFY(CPARSEC4_INPUT_TYPE)(predicate)
+#define any()              P_ANY(CPARSEC4_INPUT_TYPE)()
+#define token(c)           P_TOKEN(CPARSEC4_INPUT_TYPE)(c)
+#define eof()              P_EOF(CPARSEC4_INPUT_TYPE)()
 
 def_ParserToken(CPARSEC4_INPUT_TYPE);
 

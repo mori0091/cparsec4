@@ -14,12 +14,8 @@
 #include "cparsec4/parser/repeat.h"
 #include "cparsec4/prelude/tg_parser.h"
 
-#define PARSER_REPEAT(p)                                                 \
-  GENERIC((p), Parser, trait_ParserRepeat, CPARSEC4_INOUT_TYPES_1())
-#define trait_ParserRepeat(I, O) trait(ParserRepeat(I, O))
-
-#define many(p)                  PARSER_REPEAT(p).Many(p)
-#define many1(p)                 PARSER_REPEAT(p).Many1(p)
+#define many(p)  P_GENERIC_1(P_MANY, p)(p)
+#define many1(p) P_GENERIC_1(P_MANY1, p)(p)
 
 FOREACH(def_ParserRepeat, CPARSEC4_INOUT_TYPES_1());
 

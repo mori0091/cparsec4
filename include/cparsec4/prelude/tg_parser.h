@@ -14,8 +14,33 @@
 #include "cparsec4/parser.h"
 #include "cparsec4/prelude/config.h"
 
-#define GENERIC_PARSER(p)                                                \
-  GENERIC((p), Parser, trait_Parser, CPARSEC4_INOUT_TYPES())
+/**
+ * Expands to `f(I, O)` depending on type of parser `p`.
+ *
+ * Expands to `f(I, O)` if
+ * - `p` is a `Parser(I, O)`, and
+ * - `(I, O)` is a member of `CPARSEC4_INOUT_TYPES()`.
+ */
+#define P_GENERIC(f, p) GENERIC((p), Parser, f, CPARSEC4_INOUT_TYPES())
+
+/**
+ * Expands to `f(I, O)` depending on type of parser `p`.
+ *
+ * Expands to `f(I, O)` if
+ * - `p` is a `Parser(I, O)`, and
+ * - `(I, O)` is a member of `CPARSEC4_INOUT_TYPES_1()`.
+ */
+#define P_GENERIC_1(f, p)                                                \
+  GENERIC((p), Parser, f, CPARSEC4_INOUT_TYPES_1())
+
+/**
+ * Expands to `trait(Parser(I, O))` depending on type of parser `p`.
+ *
+ * Expands to `trait(Parser(I, O))` if
+ * - `p` is a `Parser(I, O)`, and
+ * - `(I, O)` is a member of `CPARSEC4_INOUT_TYPES()`.
+ */
+#define GENERIC_PARSER(p)     P_GENERIC(trait_Parser, p)
 #define trait_Parser(I, O)    trait(Parser(I, O))
 
 #define g_run_parse(p, input) GENERIC_PARSER(p).run_parse((p), (input))
