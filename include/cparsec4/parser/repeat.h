@@ -22,7 +22,7 @@
 
 #define def_ParserRepeat(I, O)                                           \
   require_trait(Parser(I, O));                                           \
-  require_type(Vec(O));                                                  \
+  require_trait(Parser(I, Vec(O)));                                      \
                                                                          \
   Parser(I, Vec(O)) P_MANY(I, O)(Parser(I, O) p);                        \
   Parser(I, Vec(O)) P_MANY1(I, O)(Parser(I, O) p);                       \
