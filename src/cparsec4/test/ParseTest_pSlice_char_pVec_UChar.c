@@ -8,8 +8,10 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
+#define CPARSEC4_CONFIG_NOTHING (1)
+#define CPARSEC4_CONFIG_USER_OUTPUT_TYPES Char
 #define CPARSEC4_INPUT_TYPE Slice(char)
-#include "cparsec4/prelude.h"
+#include "cparsec4/prelude/tg_parsetest.h"
 
 
 impl_ParseTest(Slice(char), Vec(Char));
