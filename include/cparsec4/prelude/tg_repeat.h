@@ -19,6 +19,4 @@
 
 FOREACH(def_ParserRepeat, CPARSEC4_INOUT_TYPES_1());
 
-// FOREACH(impl_ParserRepeat, CPARSEC4_INOUT_TYPES_1());
-
 #endif // CPARSEC4_PRELUDE_TG_REPEAT_H_

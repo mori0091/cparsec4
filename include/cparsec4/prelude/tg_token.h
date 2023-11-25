@@ -21,6 +21,4 @@
 
 def_ParserToken(CPARSEC4_INPUT_TYPE);
 
-// impl_ParserToken(CPARSEC4_INPUT_TYPE);
-
 #endif // CPARSEC4_PRELUDE_TG_TOKEN_H_

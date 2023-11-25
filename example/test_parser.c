@@ -110,6 +110,17 @@ static void test_many1(void) {
   g_drop(p);
 }
 
+static void test_choice(void) {
+  PARSER(Tok) p = choice(token(CHR("a")), token(CHR("b")));
+  // clang-format off
+  g_test_parse_ok (p, STR("abc"), CHR("a"), STR("bc"));
+  g_test_parse_ok (p, STR("bc") , CHR("b"), STR("c"));
+  g_test_parse_err(p, STR("c")  , E.unexpected_token(CHR("c")), STR("c"));
+  g_test_parse_err(p, STR("")   , E.end_of_input(), STR(""));
+  // clang-format on
+  g_drop(p);
+}
+
 #include <locale.h>
 #include <stdlib.h>
 
@@ -122,6 +133,8 @@ int main(void) {
 
   test_many();
   test_many1();
+
+  test_choice();
 
   return 0;
 }
