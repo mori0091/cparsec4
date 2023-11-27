@@ -131,6 +131,16 @@ static void test_choice2(void) {
   g_drop(p);
 }
 
+static void test_attempt(void) {
+  PARSER(Chunk) p = choice(attempt(tokens(STR("one"))), attempt(tokens(STR("two"))), attempt(tokens(STR("three"))));
+  // clang-format off
+  g_test_parse_ok(p, STR("one")  , STR("one")  , STR(""));
+  g_test_parse_ok(p, STR("two")  , STR("two")  , STR(""));
+  g_test_parse_ok(p, STR("three"), STR("three"), STR(""));
+  // clang-format on
+  g_drop(p);
+}
+
 #include <locale.h>
 #include <stdlib.h>
 
@@ -146,6 +156,7 @@ int main(void) {
 
   test_choice();
   test_choice2();
+  test_attempt();
 
   return 0;
 }

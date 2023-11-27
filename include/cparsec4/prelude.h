@@ -12,11 +12,12 @@
 #define CPARSEC4_PRELUDE_H_
 
 #include "cparsec4/prelude/config.h"
-#include "cparsec4/prelude/tg_choice.h"
 #include "cparsec4/prelude/tg_parser.h"
+#include "cparsec4/prelude/tg_parsetest.h"
+
+#include "cparsec4/prelude/tg_choice.h"
+#include "cparsec4/prelude/tg_combinator.h"
 #include "cparsec4/prelude/tg_repeat.h"
 #include "cparsec4/prelude/tg_token.h"
-
-#include "cparsec4/prelude/tg_parsetest.h"
 
 #endif // CPARSEC4_PRELUDE_H_
