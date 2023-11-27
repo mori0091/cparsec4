@@ -19,6 +19,9 @@
 #define token(c)           P_TOKEN(CPARSEC4_INPUT_TYPE)(c)
 #define eof()              P_EOF(CPARSEC4_INPUT_TYPE)()
 
+#define tokens(s)          P_TOKENS(CPARSEC4_INPUT_TYPE)(s)
+#define tokens_cmp(s, cmp) P_TOKENS_CMP(CPARSEC4_INPUT_TYPE)(s, cmp)
+
 def_ParserToken(CPARSEC4_INPUT_TYPE);
 
 #endif // CPARSEC4_PRELUDE_TG_TOKEN_H_

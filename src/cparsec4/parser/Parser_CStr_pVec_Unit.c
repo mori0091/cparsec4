@@ -8,9 +8,9 @@
 // GitHub cparsec4 project
 // https://github.com/mori0091/cparsec4
 
-#define CPARSEC4_CONFIG_NOTHING (1)
+#define CPARSEC4_CONFIG_NOTHING           (1)
 #define CPARSEC4_CONFIG_USER_OUTPUT_TYPES Unit
-#define CPARSEC4_INPUT_TYPE CStr
+#define CPARSEC4_INPUT_TYPE               CStr
 #include "cparsec4/prelude/tg_parser.h"
 
 
