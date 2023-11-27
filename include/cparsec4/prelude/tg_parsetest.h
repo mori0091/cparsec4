@@ -18,10 +18,12 @@
 #define trait_ParseTest(I, O) trait(ParseTest(I, O))
 
 #define g_test_parse_ok(p_, input_, ok_, rest_)                          \
-  PARSE_TEST(p_).test_parse_ok((p_), (input_), (ok_), (rest_))
+  PARSE_TEST(p_).test_parse_ok(__FILE__, __LINE__, (p_), (input_),       \
+                               (ok_), (rest_))
 
 #define g_test_parse_err(p_, input_, err_, rest_)                        \
-  PARSE_TEST(p_).test_parse_err((p_), (input_), (err_), (rest_))
+  PARSE_TEST(p_).test_parse_err(__FILE__, __LINE__, (p_), (input_),      \
+                                (err_), (rest_))
 
 FOREACH(def_ParseTest, CPARSEC4_INOUT_TYPES());
 

@@ -19,27 +19,33 @@
 #define def_ParseTest(I, O)                                              \
   require_trait(Parser(I, O));                                           \
   def_trait(ParseTest(I, O)) {                                           \
-    void (*test_parse_ok)(Parser(I, O) p, I input, O ok, I rest);        \
-    void (*test_parse_err)(Parser(I, O) p, I input, ERROR(I) err,        \
-                           I rest);                                      \
+    void (*test_parse_ok)(const char* file, int line, Parser(I, O) p,    \
+                          I input, O ok, I rest);                        \
+    void (*test_parse_err)(const char* file, int line, Parser(I, O) p,   \
+                           I input, ERROR(I) err, I rest);               \
   }
 
 #define impl_ParseTest(I, O)                                             \
+  static void FUNC_NAME(assert_eq, ParseTest(I, O))(                     \
+    const char* file, int line, ParseResult(I, O) expect,                \
+    ParseResult(I, O) actual) {                                          \
+    assert_binop_(file, line, "expect", "==", "actual", expect,          \
+                  trait(Eq(ParseResult(I, O))).eq, actual);              \
+    trait(Drop(ParseResult(I, O))).drop(&expect);                        \
+    trait(Drop(ParseResult(I, O))).drop(&actual);                        \
+  }                                                                      \
   static void FUNC_NAME(test_parse_ok, ParseTest(I, O))(                 \
-    Parser(I, O) p, I input, O ok, I rest) {                             \
-    ParseResult(I, O) actual = trait(Parser(I, O)).parse(p, input);      \
-    ParseResult(I, O) expect = trait(ParseResult(I, O)).Ok(rest, ok);    \
-    assert_eq(expect, actual);                                           \
-    g_drop(expect);                                                      \
-    g_drop(actual);                                                      \
+    const char* file, int line, Parser(I, O) p, I input, O ok, I rest) { \
+    FUNC_NAME(assert_eq, ParseTest(I, O))                                \
+    (file, line, trait(ParseResult(I, O)).Ok(rest, ok),                  \
+     trait(Parser(I, O)).parse(p, input));                               \
   }                                                                      \
   static void FUNC_NAME(test_parse_err, ParseTest(I, O))(                \
-    Parser(I, O) p, I input, ERROR(I) err, I rest) {                     \
-    ParseResult(I, O) actual = trait(Parser(I, O)).parse(p, input);      \
-    ParseResult(I, O) expect = trait(ParseResult(I, O)).Err(rest, err);  \
-    assert_eq(expect, actual);                                           \
-    g_drop(expect);                                                      \
-    g_drop(actual);                                                      \
+    const char* file, int line, Parser(I, O) p, I input, ERROR(I) err,   \
+    I rest) {                                                            \
+    FUNC_NAME(assert_eq, ParseTest(I, O))                                \
+    (file, line, trait(ParseResult(I, O)).Err(rest, err),                \
+     trait(Parser(I, O)).parse(p, input));                               \
   }                                                                      \
   impl_trait(ParseTest(I, O)) {                                          \
     .test_parse_ok = FUNC_NAME(test_parse_ok, ParseTest(I, O)),          \
