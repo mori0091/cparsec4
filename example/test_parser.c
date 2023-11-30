@@ -49,7 +49,7 @@
 
 // ---------------------------------------------------------------------
 static void test_parser0(void) {
-  Input input = STR("Hello / こんにちは");
+  Input input = STR(u8"Hello / こんにちは");
   PARSER(Unit) eof = eof();
   PARSER(Vec(Tok)) ps = many(any());
   {
@@ -64,7 +64,7 @@ static void test_parser0(void) {
 }
 
 static void test_parser1(void) {
-  Input input = STR("Hello / こんにちは");
+  Input input = STR(u8"Hello / こんにちは");
   PARSER(Tok) p = any();
   PRESULT(Tok) r = g_parse(p, input);
   while (!r.is_err) {
@@ -144,8 +144,20 @@ static void test_attempt(void) {
 #include <locale.h>
 #include <stdlib.h>
 
+char * set_character_encoding_to_utf8(void) {
+  char * lc = setlocale(LC_ALL, ".UTF-8");
+  if (!lc) {
+    lc = setlocale(LC_ALL, "C.UTF-8");
+  }
+  if (!lc) {
+    // fall back to the default locale.
+    lc = setlocale(LC_ALL, "");
+  }
+  return lc;
+}
+
 int main(void) {
-  setlocale(LC_ALL, getenv("LANG"));
+  println("The locale is set to ", set_character_encoding_to_utf8());
 
   test_parser0();
   test_parser1();
